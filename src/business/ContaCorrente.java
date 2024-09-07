@@ -1,19 +1,29 @@
 package business;
+
 import java.math.BigDecimal;
 
 public class ContaCorrente extends Conta {
 
     private BigDecimal saldoCCorrente;
 
-    public BigDecimal getSaldoCCorrente(){
+    //default porque quem tá fora do pacote precisa passar pelo Gerenciador para ver e definir o saldo.
+    BigDecimal getSaldoCCorrente(){
         return this.saldoCCorrente;
     }
 
-    public void setSaldoCCorrente(BigDecimal valor){
+    void setSaldoCCorrente(BigDecimal valor){
         this.saldoCCorrente = valor;
     }
 
-    public ContaCorrente(String agencia, String numero){
+    public String getAgencia(){
+        return super.getAgencia();
+    }
+
+    public String getNumero(){
+        return super.getNumero();
+    }
+
+    ContaCorrente(String agencia, String numero){
         super(agencia,numero);
         this.saldoCCorrente = new BigDecimal(0);
     }
@@ -38,19 +48,19 @@ public class ContaCorrente extends Conta {
         this.saldoCCorrente = this.saldoCCorrente.add(valor);
     }
 
-    @Override
-    public void transferirPara(BigDecimal valor, String agencia, String numero) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'transferirPara'");
-    }
-
 
     private boolean podeSubtrair(BigDecimal valor) {
         return this.saldoCCorrente.compareTo(valor) > 0;
     }
 
+    //forma de emitir o extrato sem precisar do gerenciador, logo, é public
     @Override
     public void visualizarExtrato() {
-        System.out.println("Saldo na Conta Corrente é: "+ Double.parseDouble(getSaldoCCorrente().toString()));
+        System.out.println("--------------------");
+        System.out.println("Agência: " + getAgencia());
+        System.out.println("Número: " + getNumero());
+        System.out.println("Tipo de conta: " + TipoDeContaEnum.CONTA_CORRENTE.getDescricao());
+        System.out.println("Saldo: "+ Double.parseDouble(getSaldoCCorrente().toString()));
+        System.out.println("--------------------");
     }
 }

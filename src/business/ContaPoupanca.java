@@ -6,16 +6,25 @@ public class ContaPoupanca extends Conta {
 
     private BigDecimal saldoCPoupanca;
 
-    public BigDecimal getSaldoCPoupanca(){
+    //default porque quem tá fora do pacote precisa passar pelo Gerenciador para ver e definir o saldo.
+    BigDecimal getSaldoCPoupanca(){
         return this.saldoCPoupanca;
     }
 
-    public void setSaldoCPoupanca(BigDecimal valor){
+    void setSaldoCPoupanca(BigDecimal valor){
         this.saldoCPoupanca = valor;
     }
 
+    
+    public String getAgencia(){
+        return super.getAgencia();
+    }
+
+    public String getNumero(){
+        return super.getNumero();
+    }
+
     ContaPoupanca(String agencia, String numero){
-        //verificar se já existe contaPoupança com essa agencia e esse número
         super(agencia,numero);
         this.saldoCPoupanca = new BigDecimal(0);
     }
@@ -41,20 +50,20 @@ public class ContaPoupanca extends Conta {
         this.saldoCPoupanca = this.saldoCPoupanca.add(valor);
     }
 
-    @Override
-    public void transferirPara(BigDecimal valor, String agencia, String numero) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'transferirPara'");
-    }
-
 
     protected boolean podeSubtrair(BigDecimal valor) {
         return this.saldoCPoupanca.compareTo(valor) > 0;
     }
 
+    //forma de emitir o extrato sem precisar do gerenciador, logo, é public
     @Override
     public void visualizarExtrato() {
-        System.out.println("Saldo na Conta Poupança é: "+ Double.parseDouble(getSaldoCPoupanca().toString()));
+        System.out.println("--------------------");
+        System.out.println("Agência: " + getAgencia());
+        System.out.println("Número: " + getNumero());
+        System.out.println("Tipo de conta: " + TipoDeContaEnum.POUPANCA.getDescricao());
+        System.out.println("Saldo: "+ Double.parseDouble(getSaldoCPoupanca().toString()));
+        System.out.println("--------------------");
     }
 
     

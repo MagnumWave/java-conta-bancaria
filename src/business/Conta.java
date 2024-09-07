@@ -2,6 +2,7 @@ package business;
 
 public abstract class Conta implements IMovimentacao {
 
+    //strings pois podem possuir separadores de dígito verificador, por exemplo.
     private String agencia;
     private String numero;
 
@@ -9,7 +10,7 @@ public abstract class Conta implements IMovimentacao {
         return this.agencia;
     }
 
-    public void setAgencia(String agencia){
+    void setAgencia(String agencia){
         this.agencia = agencia;
     }
 
@@ -17,7 +18,7 @@ public abstract class Conta implements IMovimentacao {
         return this.numero;
     }
 
-    public void setNumero(String numero){
+    void setNumero(String numero){
         this.numero = numero;
     }
 
