@@ -1,3 +1,5 @@
+package business;
+
 public enum TipoDeContaEnum {
     CONTA_CORRENTE(0,"Conta Corrente"),
     POUPANCA(1,"Poupança");
