@@ -1,6 +1,7 @@
 package business;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class ContaCorrente extends Conta {
 
@@ -45,7 +46,20 @@ public class ContaCorrente extends Conta {
 
     @Override
     public void depositar(BigDecimal valor) {
+
         this.saldoCCorrente = this.saldoCCorrente.add(valor);
+        System.out.println("Depósito de R$"+valor.toPlainString()+" realizado na conta "+getNumero());
+
+    }
+
+    @Override
+    public void depositar(BigDecimal valor, boolean isFromTransferencia) {
+        this.saldoCCorrente = this.saldoCCorrente.add(valor);
+
+        if(!isFromTransferencia){
+            System.out.println("Depósito de R$"+valor.toPlainString()+" realizado na conta "+getNumero());
+        }
+
     }
 
 
@@ -62,5 +76,54 @@ public class ContaCorrente extends Conta {
         System.out.println("Tipo de conta: " + TipoDeContaEnum.CONTA_CORRENTE.getDescricao());
         System.out.println("Saldo: "+ Double.parseDouble(getSaldoCCorrente().toString()));
         System.out.println("--------------------");
+    }
+
+	@Override
+	public void transferirPara(IMovimentacao conta, BigDecimal valor) {
+		
+        if (!validaTransferencia(conta, valor)) {
+            return;
+        }
+
+        if (podeSubtrair(valor)) {
+            BigDecimal diferenca = this.saldoCCorrente.subtract(valor);
+            this.saldoCCorrente = diferenca; 
+            conta.depositar(valor, true);
+            this.saldoCCorrente = this.saldoCCorrente.add(valor);
+            System.out.println("--------------------");
+            System.out.println("Transferência realizada com sucesso!");
+            System.out.println("Conta "+getNumero()+
+                            " transferiu R$"+valor.toPlainString()+
+                            " para a conta "+conta.getNumero()+".");
+            System.out.println("--------------------");
+        } else {
+            System.out.println("Não há saldo suficiente para realizar essa transferência.");
+            return;
+        }
+	}
+
+    private boolean validaTransferencia(IMovimentacao conta, BigDecimal valor) {
+        if(Objects.isNull(conta)){
+            System.out.println("Conta não informada.");
+            return false;
+        }
+
+        if(Objects.isNull(valor)){
+            System.out.println("Valor não informado.");
+            return false;
+        }
+
+        if(Objects.equals(conta, this)){
+            System.out.println("Contas remetente e destinatária são as mesmas.");
+            return false;
+        }
+
+        if(valor.signum() <= 0){
+            System.out.println("Valores negativos ou nulos não são válidos.");
+            return false;
+        }
+
+        return true;
+
     }
 }

@@ -6,10 +6,10 @@ public interface IMovimentacao {
 
     public boolean sacar(BigDecimal valor);
     public void depositar(BigDecimal valor);
-    // public void transferirPara(BigDecimal valor, String agencia, String numero);
+    //overload para não exibir mensagem de dpósito quando é transferência.
+    public void depositar(BigDecimal valor, boolean isFromTransferencia);
+    public void transferirPara(IMovimentacao conta, BigDecimal valor);
     public void visualizarExtrato();
-    //a transferência precisa conhecer a conta destinatária e essa conta precisa ser validada
-    //logo, implementei a transferência na classe GerenciadorConta
     public String getAgencia();
     public String getNumero();
 

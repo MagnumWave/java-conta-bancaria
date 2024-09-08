@@ -8,7 +8,7 @@ public abstract class GerenciadorContas {
 
     //sem persistencia essa conferência poderia ser feita em um banco de dados.
     //mas é responsabilidade do Gerenciador saber quantas e quais contas existem.
-    //para este exemplo iremos fornecer ela de fora do pacote como sendo uma lista válida.
+    //para este exemplo iremos fornecer as contas pre-existentes de fora do pacote como sendo uma lista válida.
     public static ContaCorrente criarContaCorrente(String agencia, String numero, Set<IMovimentacao> contasPreExistentes){
         if (contaJaExiste(agencia, numero, TipoDeContaEnum.CONTA_CORRENTE, contasPreExistentes)) {
             System.out.println("Conta informada já existe como Conta Corrente.");
@@ -24,37 +24,6 @@ public abstract class GerenciadorContas {
             return null;
         }
         return new ContaPoupanca(agencia,numero);
-    }
-
-    public static void realizarTransferencia(IMovimentacao remetente, IMovimentacao destinataria, BigDecimal valor, Set<IMovimentacao> contasPreExistentes){
-
-        if(valorTransferidoInvalido(valor)){
-            System.out.println("Informe um valor positivo e diferente de zero.");
-            return;
-        }
-
-        if(!contasInformadasExistemNaLista(remetente, destinataria, contasPreExistentes)){
-            //segurança:
-            //nem sempre informamos que uma conta não existe, pois o usuário tentará uma brecha pra cadastrar maliciosamente.
-            System.out.println("Contas informadas não estão válidas.");
-            return;
-        }
-
-        boolean podeSacar = remetente.sacar(valor);
-
-        if (podeSacar){
-            destinataria.depositar(valor);
-        } else {
-            System.out.println("Transferência não pôde ser realizada");
-        }
-    }
-
-    private static boolean contasInformadasExistemNaLista(IMovimentacao remetente, IMovimentacao destinataria, Set<IMovimentacao> contasPreExistentes) {
-
-        boolean remetenteExiste = contasPreExistentes.contains(remetente);
-        boolean destinatariaExiste = contasPreExistentes.contains(destinataria);
-
-        return remetenteExiste && destinatariaExiste;
     }
 
     private static boolean contaJaExiste(String agencia, String numero, TipoDeContaEnum tipoDeConta, Set<IMovimentacao> contasPreExistentes) {
@@ -84,10 +53,6 @@ public abstract class GerenciadorContas {
 
         //retorna falso dizendo que a conta não existe e pode ser criada
         return false;
-    }
-
-    private static boolean valorTransferidoInvalido(BigDecimal valor) {
-        return (valor.signum() == -1 || valor.signum() == 0);
     }
     
 }

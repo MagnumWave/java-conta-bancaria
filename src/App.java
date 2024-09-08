@@ -13,19 +13,34 @@ public class App {
 
         Set<IMovimentacao> contasCriadas = new HashSet<>();
 
-        ContaCorrente cc = GerenciadorContas.criarContaCorrente("123", "asd", contasCriadas);
-        contasCriadas.add(cc);
-        ContaPoupanca cp = GerenciadorContas.criarContaPoupanca("456", "zxc",contasCriadas);
-        contasCriadas.add(cp);
+        ContaCorrente cc1 = GerenciadorContas.criarContaCorrente("123", "asd", contasCriadas);
+        contasCriadas.add(cc1);
+        ContaPoupanca cp1 = GerenciadorContas.criarContaPoupanca("456", "zxc",contasCriadas);
+        contasCriadas.add(cp1);
 
-        cc.depositar(BigDecimal.valueOf(100));
-        cp.depositar(BigDecimal.valueOf(100));
+        //esta falha porque o gerenciador sabe que ela já existe.
+        ContaCorrente cc2 = GerenciadorContas.criarContaCorrente("123", "asd", contasCriadas);
 
-        GerenciadorContas.realizarTransferencia(cc, cp, BigDecimal.valueOf(50),contasCriadas);
+        //esta pode ser criada porque é a mesma agencia e numero
+        //acumulando contas dos 2 tipos.
+        ContaCorrente cc3 = GerenciadorContas.criarContaCorrente("456", "zxc",contasCriadas);
+        contasCriadas.add(cc3);
 
-        cc.visualizarExtrato();
-        cp.visualizarExtrato();
+        cc1.depositar(BigDecimal.valueOf(100));
+        cp1.depositar(BigDecimal.valueOf(100));
 
+        
+        // TESTES - descomente para testar
+        // cp.transferirPara(null, BigDecimal.valueOf(50));
+        // cp.transferirPara(cc, null);
+        // cp.transferirPara(cc, BigDecimal.valueOf(-50));
+        // cp.transferirPara(cc, BigDecimal.valueOf(0));
+        // cp.transferirPara(cc, BigDecimal.valueOf(200));
+
+        cp1.transferirPara(cc1, BigDecimal.valueOf(50));
+
+        cc1.visualizarExtrato();
+        cp1.visualizarExtrato();
         
     }
 }
